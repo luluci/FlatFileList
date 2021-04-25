@@ -26,7 +26,9 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 	private _onDidChangeTreeData: vscode.EventEmitter<TreeItem | null> = new vscode.EventEmitter<TreeItem | null>();
 	readonly onDidChangeTreeData: vscode.Event<TreeItem | null> = this._onDidChangeTreeData.event;
 	private _fileSystemWatcher: Array<vscode.FileSystemWatcher>;
-	
+	private _confExclDirs: Array<string>;
+	private _confInclExtension: Array<string>;
+
 	constructor(private context: vscode.ExtensionContext) {
 		// イベント登録
 		vscode.workspace.onDidChangeWorkspaceFolders(e => this.onWorkspaceChanged(e));
@@ -49,7 +51,48 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 		}
 		// Treeデータ初期化
 		this.filetree = [];
-		
+		// configuration
+		this._confExclDirs = [];
+		this._confInclExtension = [];
+		this.loadConfig();
+	}
+
+	private loadConfig() {
+		//
+		const conf = vscode.workspace.getConfiguration('flatFileList');
+		this._confExclDirs = this.commaSeqToArray(conf.exclude.dir);
+		this._confInclExtension = this.commaSeqToArray(conf.include.extension);
+	}
+	private commaSeqToArray(org: string) {
+		let result : Array<string> = [];
+		let reSep = /(["'])/;
+		//
+		while (org !== "") {
+			// 空白スキップ
+			let temp = org.trim();
+			// 先頭文字チェック
+			let posBegin = 0;
+			let posOffset = 0;
+			let ch = temp.charAt(posBegin);
+			let reMatch = ch.match(reSep);
+			let sep = ",";
+			if (reMatch) {
+				posBegin = 1;
+				posOffset = 1;
+				sep = reMatch[0];
+			}
+			// 区切り文字の位置を探す
+			let posEnd = temp.indexOf(sep, posBegin);
+			if (posEnd === -1) {
+				posEnd = temp.length;
+			}
+			// 先頭データ分割
+			let token = temp.slice(posBegin, posEnd).trim();
+			result.push(token);
+			// 次文字列作成
+			org = temp.slice(posEnd + 1 + posOffset);
+		}
+		return result;
 	}
 
 	refresh(item: TreeItem|null): void {
@@ -170,14 +213,20 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 				const [dirUri, relPath] = dirList[i];
 				for (const [name, type] of await vscode.workspace.fs.readDirectory(dirUri)) {
 					if (type === vscode.FileType.File) {
-						let fileUri = vscode.Uri.parse(posix.join(dirUri.path, name));
-						let item = new TreeItem(relPath, fileUri);
-						this.filetree.push(item);
-						console.log(name);
+						let ext = posix.extname(name);
+						if (this._confInclExtension.length === 0 || this._confInclExtension.includes(ext)) {
+							let fileUri = vscode.Uri.parse(posix.join(dirUri.path, name));
+							let item = new TreeItem(relPath, fileUri);
+							this.filetree.push(item);
+							console.log(name);
+						}
 					} else if (type === vscode.FileType.Directory) {
-						// 子ディレクトリURIを作成
-						let child = vscode.Uri.parse(posix.join(dirUri.path, name));
-						dirList.push([child, relPath + "/" + name]);
+						// 除外ディレクトリチェック
+						if (!this._confExclDirs.includes(name)) {
+							// 子ディレクトリURIを作成
+							let child = vscode.Uri.parse(posix.join(dirUri.path, name));
+							dirList.push([child, relPath + "/" + name]);
+						}
 					}
 				}
 			}

@@ -15,6 +15,23 @@
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"configuration": [
+			{
+				"title": "FlatFileList",
+				"properties": {
+					"flatFileList.exclude.dir": {
+						"type": "string",
+						"default": ".git, .svn, .venv, __pycache__, .mypy_cache, node_modules",
+						"description": "These Dirs exclude list target."
+					},
+					"flatFileList.include.extension": {
+						"type": "string",
+						"default": "",
+						"description": "These files include list target."
+					}
+				}
+			}
+		],
 		"commands": [
 			{
 				"command": "flatfilelist.flat_filelist",

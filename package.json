@@ -1,6 +1,10 @@
 {
 	"name": "flatfilelist",
 	"publisher": "luluci",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/luluci/FlatFileList.git"
+	},
 	"displayName": "flat_filelist",
 	"description": "",
 	"version": "0.0.1",

@@ -19,6 +19,11 @@
 			{
 				"command": "flatfilelist.flat_filelist",
 				"title": "ShowFlatFilelist"
+			},
+			{
+				"command": "flatfilelist.action_sort",
+				"title": "Sort",
+				"icon": "$(sort-precedence)"
 			}
 		],
 		"viewsContainers": {
@@ -35,6 +40,15 @@
 				{
 					"id": "flatfilelistView",
 					"name": "FlatFileList"
+				}
+			]
+		},
+		"menus": {
+			"view/title": [
+				{
+					"command": "flatfilelist.action_sort",
+					"when": "view == flatfilelistView",
+					"group": "navigation"
 				}
 			]
 		}

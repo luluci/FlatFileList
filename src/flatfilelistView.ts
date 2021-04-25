@@ -28,6 +28,7 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 	private _fileSystemWatcher: Array<vscode.FileSystemWatcher>;
 	private _confExclDirs: Array<string>;
 	private _confInclExtension: Array<string>;
+	private _sortByTreeItem: (a: TreeItem, b: TreeItem) => number;
 
 	constructor(private context: vscode.ExtensionContext) {
 		// イベント登録
@@ -55,6 +56,16 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 		this._confExclDirs = [];
 		this._confInclExtension = [];
 		this.loadConfig();
+		// Tree Sort
+		this._sortByTreeItem = (a: TreeItem, b: TreeItem) => {
+			if (a.resourceUri === undefined || b.resourceUri === undefined) {
+				return -1;
+			} else {
+				let bName = posix.basename(b.resourceUri.path);
+				let aName = posix.basename(a.resourceUri.path);
+				return aName.localeCompare(bName);
+			}
+		};
 	}
 
 	private loadConfig() {
@@ -100,7 +111,8 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 	}
 
 	sort() {
-		
+		// Display a message box to the user
+		vscode.window.showInformationMessage('not impl...');
 	}
 
 	private onFWCreated(uri: vscode.Uri) {
@@ -111,6 +123,8 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 		let item = new TreeItem(relPath, uri);
 		// Treeに追加
 		this.filetree.push(item);
+		// sort
+		this.filetree.sort(this._sortByTreeItem);
 		// refresh
 		this.refresh(null);
 	}
@@ -231,6 +245,8 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 				}
 			}
 		}
+		// sort
+		this.filetree.sort(this._sortByTreeItem);
 		return this.filetree;
 	}
 

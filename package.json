@@ -38,7 +38,7 @@
 				"title": "ShowFlatFilelist"
 			},
 			{
-				"command": "flatfilelist.action_sort",
+				"command": "flatfilelist.sort",
 				"title": "Sort",
 				"icon": "$(sort-precedence)"
 			}
@@ -63,7 +63,7 @@
 		"menus": {
 			"view/title": [
 				{
-					"command": "flatfilelist.action_sort",
+					"command": "flatfilelist.sort",
 					"when": "view == flatfilelistView",
 					"group": "navigation"
 				}

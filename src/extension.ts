@@ -1,7 +1,7 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';
-import {TreeItem, FlatFileListView} from './flatfilelistView';
+import {TreeItem, FlatFileListView} from './flatFileListView';
 
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
@@ -27,6 +27,7 @@ export function activate(context: vscode.ExtensionContext) {
 	// FlatFileListView 定義
 	const vscl = new FlatFileListView(context);
 	vscode.window.registerTreeDataProvider<TreeItem>('flatfilelistView', vscl);
+	vscode.commands.registerCommand('flatfilelist.sort', ()=>vscl.sort());
 }
 
 // this method is called when your extension is deactivated

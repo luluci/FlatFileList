@@ -116,8 +116,8 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 	}
 
 	private onFWCreated(uri: vscode.Uri) {
-		console.log(":onFWCreated:");
-		console.log(uri);
+		//console.log(":onFWCreated:");
+		//console.log(uri);
 		// 新規ファイル
 		let relPath = this.makeRelPath(uri);
 		let item = new TreeItem(relPath, uri);
@@ -129,8 +129,8 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 		this.refresh(null);
 	}
 	private onFWDeleted(uri: vscode.Uri) {
-		console.log(":onFWDeleted:");
-		console.log(uri);
+		//console.log(":onFWDeleted:");
+		//console.log(uri);
 		// 要素削除
 		this.filetree = this.filetree.filter((item) => {
 			if (item.resourceUri) {
@@ -148,10 +148,10 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 	}
 
 	private onWorkspaceChanged(event: vscode.WorkspaceFoldersChangeEvent): void {
-		console.log(event);
+		//console.log(event);
 	}
 	private onFileCreated(event: vscode.FileCreateEvent) {
-		console.log(event);
+		//console.log(event);
 		for (let i=0; i<event.files.length; i++) {
 			// 新規ファイル
 			let newUri = event.files[i];
@@ -163,7 +163,7 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 		this.refresh(null);
 	}
 	private onFileDeleted(event: vscode.FileDeleteEvent) {
-		console.log(event);
+		//console.log(event);
 		// 削除ファイルリスト作成
 		let delUriList = Array<string>();
 		for (let i = 0; i < event.files.length; i++) {
@@ -180,7 +180,7 @@ export class FlatFileListView implements vscode.TreeDataProvider<TreeItem> {
 		this.refresh(null);
 	}
 	private onFileRenamed(event: vscode.FileRenameEvent) {
-		console.log(event);
+		//console.log(event);
 		let tgtItem: TreeItem|undefined = undefined;
 		for (let i=0; i<event.files.length; i++) {
 			let oldUri = event.files[i].oldUri;

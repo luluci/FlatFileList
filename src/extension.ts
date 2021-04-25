@@ -6,7 +6,7 @@ import {TreeItem, FlatFileListView} from './flatFileListView';
 // this method is called when your extension is activated
 // your extension is activated the very first time the command is executed
 export function activate(context: vscode.ExtensionContext) {
-
+	/*
 	// Use the console to output diagnostic information (console.log) and errors (console.error)
 	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "flatfilelist" is now active!');
@@ -20,9 +20,8 @@ export function activate(context: vscode.ExtensionContext) {
 		// Display a message box to the user
 		vscode.window.showInformationMessage('Hello World from flat_filelist!');
 	});
-
 	context.subscriptions.push(disposable);
-
+	*/
 
 	// FlatFileListView 定義
 	const vscl = new FlatFileListView(context);
